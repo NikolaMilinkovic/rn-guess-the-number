@@ -1,4 +1,4 @@
-import { TextInput, Text, View, StyleSheet } from "react-native";
+import { TextInput, Text, View, StyleSheet, StatusBar } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useEffect, useState, useRef } from "react";
 
@@ -36,6 +36,7 @@ function StartGameScreen(){
 
   return (
     <View style={styles.StartGameScreen_page}>
+      <StatusBar style="light" />
         {isAlertVisible && (
           <View style={styles.alertModal}>
             <View style={styles.alertModalContent}>
