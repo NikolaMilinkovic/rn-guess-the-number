@@ -1,6 +1,6 @@
 import { TextInput, Text, View, StyleSheet, StatusBar } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 
 function StartGameScreen(){
@@ -8,27 +8,41 @@ function StartGameScreen(){
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const inputRef = useRef(null);
-  // useEffect(() => {
-  //   console.log(inputData)
-  // },[inputData])
 
+  // Method for reseting the input
   function resetInput(){
-    setInputData('')
+    setInputData('');
+    inputRef.current.focus();
   }
+
+  // Method for confirming the number input
   function confirm(){
-    if(!inputData){
-      setErrorMessage('Please provide a number!');
+
+    // Handle errors:
+    const number = parseInt(inputData);
+    function showAlert(){
       setIsAlertVisible(true);
+      setInputData('');
       return;
     }
-    if(inputData <= 0 || inputData > 99){
-      setErrorMessage('Number must be in range from 1 to 99!');
-      setIsAlertVisible(true);
+    if(!number){
+      setErrorMessage('Please provide a number!');
+      showAlert();
     }
+    if(number <= 0 || number > 99){
+      setErrorMessage('Number must be in range from 1 to 99!');
+      showAlert();
+    }
+    if(isNaN(parseInt(number))){
+      setErrorMessage('Please enter a valid number..');
+      showAlert();
+    }
+    // End of handling errors
 
     inputRef.current.blur();
-    console.log('DATA IS GUCCI')
   }
+
+  // Method for Error Modal reset
   function resetModal(){
     setIsAlertVisible(false);
     setErrorMessage('')
@@ -36,7 +50,10 @@ function StartGameScreen(){
 
   return (
     <View style={styles.StartGameScreen_page}>
+      {/* Status bar */}
       <StatusBar style="light" />
+
+      {/* Error modal */}
         {isAlertVisible && (
           <View style={styles.alertModal}>
             <View style={styles.alertModalContent}>
@@ -51,9 +68,11 @@ function StartGameScreen(){
           </View>
         )}
 
-
+        {/* Header text */}
         <Text style={styles.header_text_1}>Guess The</Text>
         <Text style={styles.header_text_2}>Number</Text>
+
+        {/* Inputs / Buttons */}
       <View style={styles.inputs_container}>
         <TextInput
           ref={inputRef}
@@ -68,7 +87,7 @@ function StartGameScreen(){
           value={inputData}
         />
         <View style={styles.buttons_container}>
-          {/* Input */}
+          {/* Buttons */}
           <PrimaryButton
             btnText={'Reset'}
             onPress={resetInput}
@@ -77,7 +96,6 @@ function StartGameScreen(){
             btnText={'Confirm'}
             onPress={confirm}
           />
-          {/* Buttons */}
         </View>
       </View>
     </View>
