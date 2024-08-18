@@ -23,7 +23,6 @@ function StartGameScreen({ onPickNumber }){
     const number = parseInt(inputData);
     function showAlert(){
       setIsAlertVisible(true);
-      setInputData('');
       return;
     }
     if(!number){
@@ -48,6 +47,7 @@ function StartGameScreen({ onPickNumber }){
   function resetModal(){
     setIsAlertVisible(false);
     setErrorMessage('')
+    resetInput();
   }
 
   return (
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'open-sans-bold'
   },
   header_text_2: {
     color: 'white',
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'open-sans'
   },
   StartGameScreen_page: {
     flex: 1,
@@ -180,6 +182,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     width: 100,
     textAlign: 'center',
+    fontFamily: 'open-sans-bold'
   }
 })
 

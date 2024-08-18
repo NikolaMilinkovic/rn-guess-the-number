@@ -2,57 +2,48 @@ import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
+import AntDesign from '@expo/vector-icons/AntDesign';
 
-function GameScreen({ pickedNumber, setGameIsOver }){
+function GameScreen({ pickedNumber, setGameIsOver, addTry }){
   const [guess, setGuess] = useState(null);
   const [guessedNums, setGuessedNums] = useState([]);
   const [high, setHigh] = useState(100);
-  const [low, setLow] = useState(1)
+  const [low, setLow] = useState(0)
   const [numOfGuesses, setNumOfGuesses] = useState(0);
 
   // Firt computer pick
   useEffect(() => {
     setNumber(pickedNumber);
-
-    // setTimeout(() => {
-    //   let rand = generateRandomBetween(low, high);
-    //   while(rand === pickedNumber){
-    //     rand = generateRandomBetween(low, high);
-    //   }
-    //   setGuess(rand);
-    //   setGuessedNums((prev) => [...prev, rand]);
-    // }, 1000);
-
-    
-    console.log('=== HIGHER & LOWER ===')
-    console.log(`LOW => ${low}`);
-    console.log(`HIGH => ${high}`);
-
-    console.log('\n\nPlaying next round...')
     playRound(low, high, high);
-
   }, [pickedNumber, high, low]);
 
   // Set and cache picked number
   const [number, setNumber] = useState(null);
 
   // Random number generator
-  function generateRandomBetween(min, max, exclude) {
+  function generateRandomBetween(min, max) {
     let rand;
-    do {
+    do{
       rand = Math.floor(Math.random() * (max - min)) + min;
-    } while (rand === exclude);
-
+    } while (rand === low || rand === high);
     return rand;
   }
   
   // On click handlers
-  function playRound(min, max, exclude){
-    const rand = generateRandomBetween(min, max, exclude);
+  function playRound(min, max){
+    addTry();
+    const rand = generateRandomBetween(min, max);
 
     // Game over condition
     if(rand === pickedNumber){
-      console.log('Game over!');
+
+      // Reset all states for next game
+      setGuess(null)
+      setGuessedNums([])
+      setHigh(100)
+      setLow(0)
+      setNumOfGuesses(0)
+      // Go to game over screen
       return setGameIsOver(); 
     } else {
       setNumOfGuesses(numOfGuesses + 1);
@@ -67,6 +58,19 @@ function GameScreen({ pickedNumber, setGameIsOver }){
     console.log('Tell me lies, tell me sweet little lies!');
     Alert.alert('No lying!', 'You know this is wrong...', [{ text: 'Sorry mate, its the dog in me!', style: 'cancel' }]);
   }
+
+  useEffect(() => {
+    console.log('=== GUESS IS ===')
+    console.log(guess)
+  }, [guess])
+  useEffect(() => {
+    console.log('=== HIGH IS ===')
+    console.log(high)
+  },[high])
+  useEffect(() => {
+    console.log('=== LOW IS ===')
+    console.log(low)
+  },[low])
 
   // LOWER / HIGHER BUTTONS
 
@@ -124,11 +128,12 @@ function GameScreen({ pickedNumber, setGameIsOver }){
 
           <View style={styles.buttonsContainer}>
             <PrimaryButton 
-              btnText={'Higher +'}
+              // btnText={'Higher +'}
+              btnIcon={<AntDesign name="plus" size={24} color="white" />}
               onPress={handleHigher}
             />
             <PrimaryButton 
-              btnText={'Lower -'}
+              btnIcon={<AntDesign name="minus" size={24} color="white" />}
               onPress={handleLower}
             />
           </View>
@@ -157,19 +162,22 @@ const styles = new StyleSheet.create({
     color: Colors.darkPlum,
     fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'open-sans-bold'
   },
   title: {
     fontSize: 20,
     color: Colors.darkPlum,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'open-sans'
   },
   guessedNumberText: {
     fontSize: 20,
     color: Colors.primaryOrange,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'open-sans-bold'
   },
 
 
@@ -210,7 +218,8 @@ const styles = new StyleSheet.create({
   computerGuess: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: 'white'
+    color: 'white',
+    fontFamily: 'open-sans-bold'
   }
 
 })
