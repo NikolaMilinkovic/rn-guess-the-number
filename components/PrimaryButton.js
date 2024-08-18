@@ -1,5 +1,4 @@
-import { View, Text, Pressable, Animated, StyleSheet } from "react-native";
-import { useState, useEffect } from "react";
+import { Text, Pressable, Animated, StyleSheet } from "react-native";
 
 
 function PrimaryButton(props){
@@ -29,7 +28,7 @@ function PrimaryButton(props){
 
   return(
       <Animated.View style={[styles.btnContainer, {backgroundColor}]}>
-        <Pressable onPress={props.onPress} onPressIn={handlePress} onPressOut={handleRelease} android_ripple={{ color: '#d66915' }}>
+        <Pressable style={styles.pressable} onPress={props.onPress} onPressIn={handlePress} onPressOut={handleRelease} android_ripple={{ color: '#d66915' }}>
           <Text style={styles.btnText}> 
             {props.btnText}
           </Text>
@@ -53,6 +52,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+  },
+  pressable: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%'
   }
 })
 

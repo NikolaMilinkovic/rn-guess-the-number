@@ -1,9 +1,10 @@
 import { TextInput, Text, View, StyleSheet, StatusBar } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useState, useRef } from "react";
+import Colors from "../constants/colors";
 
 
-function StartGameScreen(){
+function StartGameScreen({ onPickNumber }){
   const [inputData, setInputData] = useState('');
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -40,6 +41,7 @@ function StartGameScreen(){
     // End of handling errors
 
     inputRef.current.blur();
+    onPickNumber(number)
   }
 
   // Method for Error Modal reset
@@ -78,7 +80,7 @@ function StartGameScreen(){
           ref={inputRef}
           style={styles.text_input}
           placeholder="1-99"
-          placeholderTextColor='#ddb52f'
+          placeholderTextColor= {Colors.primaryOrange}
           maxLength={2}
           keyboardType="number-pad"
           autoCapitalize="none"
@@ -169,8 +171,8 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   text_input: {
-    borderBottomColor: '#ddb52f',
-    color: '#ddb52f',
+    borderBottomColor:  Colors.primaryOrange,
+    color:  Colors.primaryOrange,
     borderBottomWidth: 2,
     padding: 8,
     height: 50,
