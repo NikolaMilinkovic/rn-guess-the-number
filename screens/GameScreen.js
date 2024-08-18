@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Alert, FlatList } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
@@ -11,7 +11,8 @@ function GameScreen({ pickedNumber, setGameIsOver, addTry }){
   const [low, setLow] = useState(0)
   const [numOfGuesses, setNumOfGuesses] = useState(0);
 
-  // Firt computer pick
+  // This useEffect will play each round, when we click higher / lower buttons
+  // Values will change (high / low) therefore running these methods.
   useEffect(() => {
     setNumber(pickedNumber);
     playRound(low, high, high);
@@ -29,7 +30,7 @@ function GameScreen({ pickedNumber, setGameIsOver, addTry }){
     return rand;
   }
   
-  // On click handlers
+  // One round logic
   function playRound(min, max){
     addTry();
     const rand = generateRandomBetween(min, max);
@@ -48,7 +49,7 @@ function GameScreen({ pickedNumber, setGameIsOver, addTry }){
     } else {
       setNumOfGuesses(numOfGuesses + 1);
       setGuess(rand);
-      setGuessedNums((prev) => [...prev, rand]);
+      setGuessedNums((prev) => [rand, ...prev]);
     }
 
   }
@@ -127,11 +128,14 @@ function GameScreen({ pickedNumber, setGameIsOver, addTry }){
           <Text style={styles.text}>Higher / Lower ?</Text>
 
           <View style={styles.buttonsContainer}>
+
+            {/* Button + */}
             <PrimaryButton 
-              // btnText={'Higher +'}
               btnIcon={<AntDesign name="plus" size={24} color="white" />}
               onPress={handleHigher}
             />
+
+            {/* Button - */}
             <PrimaryButton 
               btnIcon={<AntDesign name="minus" size={24} color="white" />}
               onPress={handleLower}
@@ -139,17 +143,29 @@ function GameScreen({ pickedNumber, setGameIsOver, addTry }){
           </View>
         </View>
       </View>
-      <ScrollView style={styles.computerGuessContainer}>
-          {guessedNums && guessedNums.map((num, index) => {
-            return <Text key={`${index}_guess_number_${num}`} style={styles.computerGuess}>{index + 1} - Computer guessed {num}</Text>
-          })}
-          {/* Rounds Log */}
-      </ScrollView>
+
+      {/* Log of phone guesses */}
+      <View style={styles.listContainer}>
+        <FlatList 
+          data={guessedNums}
+          renderItem={({ item, index }) => (
+            <Text key={`${index}_guess_number_${item}`} style={styles.computerGuess}>
+              {numOfGuesses - index}. Phone guessed: <Text style={styles.highlightItem}>{item}</Text>
+            </Text>
+          )}
+          keyExtractor={(item, index) => `${index}_guess_number_${item}`}
+          style={styles.computerGuessContainer}
+        />
+      </View>
     </View>
   )
 }
 
 const styles = new StyleSheet.create({
+  listContainer:{
+    flex: 1,
+    padding: 16
+  },
 
   // Main Container
   container: {
@@ -157,6 +173,8 @@ const styles = new StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: '30%'
+
   },
   text: {
     color: Colors.darkPlum,
@@ -196,7 +214,7 @@ const styles = new StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
     shadowOpacity: 0.3,
-    marginBottom: 20
+    marginBottom: 20,
   },
   // Buttons Controls
   controlsContainer: {
@@ -213,13 +231,15 @@ const styles = new StyleSheet.create({
 
   // Computer guess
   computerGuessContainer: {
-    maxHeight: '40%'
   },
   computerGuess: {
-    fontWeight: 'bold',
     fontSize: 16,
     color: 'white',
-    fontFamily: 'open-sans-bold'
+    fontWeight: 'bold',
+    fontFamily: 'open-sans-bold',
+  },
+  highlightItem: {
+    fontFamily: 'open-sans-bold',
   }
 
 })
