@@ -7,6 +7,7 @@ import GameScreen from './screens/GameScreen';
 import { useState, useEffect, useCallback } from 'react';
 import Colors from './constants/colors';
 import GameOverScreen from './screens/GameOverScreen';
+import { StatusBar } from 'expo-status-bar';
 
 // Keep the splash / loading screen visible while fonts are loading
 // Ovo ce da mi sakrije loading komponentu, prikazace je samo dok loaduje fontove, sto znaci
@@ -73,19 +74,22 @@ export default function App() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <LinearGradient style={styles.backgroundGradient} colors={['rgba(59, 2, 31, 0.8)', 'transparent']} />
-      <ImageBackground
-        source={require('./assets/images/yellow.jpg')}
-        style={styles.backgroundImage}
-        resizeMode='cover'
-        imageStyle={styles.imageStyle}
-      />
-      {/* Render the main content once the app is ready */}
-      <View style={styles.content}>
-        {screen}
-      </View>
-    </SafeAreaView>
+    <>
+      <StatusBar style='light'/>
+      <SafeAreaView style={styles.container}>
+        <LinearGradient style={styles.backgroundGradient} colors={['rgba(59, 2, 31, 0.8)', 'transparent']} />
+        <ImageBackground
+          source={require('./assets/images/yellow.jpg')}
+          style={styles.backgroundImage}
+          resizeMode='cover'
+          imageStyle={styles.imageStyle}
+        />
+        {/* Render the main content once the app is ready */}
+        <View style={styles.content}>
+          {screen}
+        </View>
+      </SafeAreaView>
+    </>
   );
 }
 

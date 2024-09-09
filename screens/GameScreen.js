@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, Alert, FlatList } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Alert, FlatList, useWindowDimensions } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
 import { useEffect, useState } from "react";
 import Colors from "../constants/colors";
@@ -10,6 +10,10 @@ function GameScreen({ pickedNumber, setGameIsOver, addTry }){
   const [high, setHigh] = useState(100);
   const [low, setLow] = useState(0)
   const [numOfGuesses, setNumOfGuesses] = useState(0);
+
+  // Dynamic values for responsive design
+  const {width, height} = useWindowDimensions();
+  const styles = dynamicStyle(height, width);
 
   // This useEffect will play each round, when we click higher / lower buttons
   // Values will change (high / low) therefore running these methods.
@@ -160,88 +164,92 @@ function GameScreen({ pickedNumber, setGameIsOver, addTry }){
     </View>
   )
 }
-
-const styles = new StyleSheet.create({
-  listContainer:{
-    flex: 1,
-    padding: 16
-  },
-
-  // Main Container
-  container: {
-    display: 'flex',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: '30%'
-
-  },
-  text: {
-    color: Colors.darkPlum,
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontFamily: 'open-sans-bold'
-  },
-  title: {
-    fontSize: 20,
-    color: Colors.darkPlum,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontFamily: 'open-sans'
-  },
-  guessedNumberText: {
-    fontSize: 20,
-    color: Colors.primaryOrange,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    fontFamily: 'open-sans-bold'
-  },
+const dynamicStyle = (height, width) => {
+  const heightUnder500 = height < 500;
 
 
-  gameContainer: {
-    borderColor: '#333333',
-    borderWidth: 0.5,
-    paddingHorizontal: '10%',
-    paddingVertical: '8%',
-    borderRadius: 8,
-    backgroundColor: 'whitesmoke',
-    alignItems: 'center',
-    // Shadow on Android
-    elevation: 4,
-    // Shadow on iOS
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    shadowOpacity: 0.3,
-    marginBottom: 20,
-  },
-  // Buttons Controls
-  controlsContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-  },
-  buttonsContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 10
-  },
+  return StyleSheet.create({
+    listContainer:{
+      flex: 1,
+      padding: 16,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
 
-  // Computer guess
-  computerGuessContainer: {
-  },
-  computerGuess: {
-    fontSize: 16,
-    color: 'white',
-    fontWeight: 'bold',
-    fontFamily: 'open-sans-bold',
-  },
-  highlightItem: {
-    fontFamily: 'open-sans-bold',
-  }
+    // Main Container
+    container: {
+      display: 'flex',
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: heightUnder500 ? '0%' : '30%',
+      flexDirection: heightUnder500 ? 'row' : 'column',
+      paddingLeft: heightUnder500 ? '10%' : 0,
+    },
+    text: {
+      color: Colors.darkPlum,
+      fontSize: 16,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      fontFamily: 'open-sans-bold'
+    },
+    title: {
+      fontSize: 20,
+      color: Colors.darkPlum,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      fontFamily: 'open-sans'
+    },
+    guessedNumberText: {
+      fontSize: 20,
+      color: Colors.primaryOrange,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      fontFamily: 'open-sans-bold'
+    },
+    gameContainer: {
+      borderColor: '#333333',
+      borderWidth: 0.5,
+      paddingHorizontal: '10%',
+      paddingVertical: '8%',
+      borderRadius: 8,
+      backgroundColor: 'whitesmoke',
+      alignItems: 'center',
+      // Shadow on Android
+      elevation: 4,
+      // Shadow on iOS
+      shadowColor: 'black',
+      shadowOffset: { width: 0, height: 2 },
+      shadowRadius: 8,
+      shadowOpacity: 0.3,
+      marginBottom: 20,
+    },
+    // Buttons Controls
+    controlsContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 10,
+    },
+    buttonsContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      gap: 10
+    },
 
-})
+    // Computer guess
+    computerGuessContainer: {
+    },
+    computerGuess: {
+      fontSize: 16,
+      color: 'white',
+      fontWeight: 'bold',
+      fontFamily: 'open-sans-bold',
+    },
+    highlightItem: {
+      fontFamily: 'open-sans-bold',
+    }
+  })
+}
 
 export default GameScreen;

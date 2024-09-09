@@ -3,7 +3,7 @@
     "name": "rn-guess-the-number",
     "slug": "rn-guess-the-number",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "backgroundColor": "#ddb52f",
     "userInterfaceStyle": "light",
